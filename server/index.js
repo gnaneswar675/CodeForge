@@ -8,22 +8,43 @@ import UserSheet from "./models/UserSheet.js"
 
 const app = express()
 const port = Number(process.env.API_PORT || process.env.PORT) || 3001
-const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:1234")
+
+const defaultOrigins = [
+  "http://localhost:1234",
+  "http://localhost:3000",
+  "https://coding-management-sheet.vercel.app",
+]
+
+const configuredOrigins = (process.env.CLIENT_ORIGIN || "")
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/$/, ""))
+  .filter(Boolean)
+
+const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])]
+
+const isOriginAllowed = (origin) => {
+  if (!origin) return true
+  const cleanOrigin = origin.replace(/\/$/, "")
+  if (allowedOrigins.includes(cleanOrigin)) return true
+  if (/^https:\/\/coding-management-sheet.*\.vercel\.app$/.test(cleanOrigin)) return true
+  return false
+}
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (isOriginAllowed(origin)) {
         callback(null, true)
         return
       }
-      callback(new Error("Origin is not allowed by CORS"))
+      callback(new Error(`Origin ${origin} is not allowed by CORS`))
     },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   }),
 )
+
 app.use(express.json({ limit: "2mb" }))
 app.use(clerkMiddleware())
 
