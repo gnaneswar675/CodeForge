@@ -83,17 +83,17 @@ export default function SubTopic({ topic, subTopic, questions }) {
       <div className="w-full">
         {/* SubTopic Header - Toggles question visibility */}
         <div 
-          className="flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+          className="flex items-center justify-between p-2 sm:p-2.5 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-white/5 transition-colors gap-2"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <IconChevronDown 
               size={14} 
-              className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-0' : '-rotate-90'}`} 
+              className={`text-slate-400 transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-0' : '-rotate-90'}`} 
             />
             
             {isEditing ? (
-              <div className="flex items-center gap-2 flex-1 max-w-[300px]" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-1.5 flex-1 min-w-0 max-w-[160px] sm:max-w-[280px]" onClick={(e) => e.stopPropagation()}>
                 <input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
@@ -105,30 +105,30 @@ export default function SubTopic({ topic, subTopic, questions }) {
                     }
                   }}
                   autoFocus
-                  className="flex-1 px-3 py-1.5 text-sm bg-white dark:bg-slate-900 border border-amber-500 rounded-lg text-slate-900 dark:text-slate-100 outline-none"
+                  className="w-full min-w-0 px-2.5 py-1 text-xs sm:text-sm bg-white dark:bg-slate-900 border border-amber-500 rounded-lg text-slate-900 dark:text-slate-100 outline-none"
                 />
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleSaveEdit()
                   }}
-                  className="p-1.5 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors cursor-pointer"
+                  className="p-1 sm:p-1.5 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors cursor-pointer flex-shrink-0"
                 >
                   <IconCheck size={14} />
                 </button>
               </div>
             ) : (
-              <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200 m-0 truncate">
+              <h3 className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 m-0 truncate">
                 {subTopic}
               </h3>
             )}
             
-            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
+            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-bold rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20 flex-shrink-0">
               {solvedCount}/{realQuestions.length}
             </span>
           </div>
 
-          <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => {
                 if (readOnly) {

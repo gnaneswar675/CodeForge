@@ -80,7 +80,7 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
             </div>
 
             {isEditing ? (
-              <div className="flex items-center gap-2 flex-1" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0" onClick={(e) => e.stopPropagation()}>
                 <input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
@@ -92,16 +92,16 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
                     }
                   }}
                   autoFocus
-                  className="flex-1 max-w-[300px] px-3 py-2 text-base font-semibold bg-white dark:bg-slate-900 border border-amber-500 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:ring-4 focus:ring-amber-500/10 outline-none"
+                  className="w-full min-w-0 max-w-[160px] sm:max-w-xs md:max-w-sm px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base font-semibold bg-white dark:bg-slate-900 border border-amber-500 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:ring-4 focus:ring-amber-500/10 outline-none"
                 />
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleSaveEdit()
                   }}
-                  className="p-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors shadow-sm cursor-pointer"
+                  className="p-1.5 sm:p-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors shadow-sm cursor-pointer flex-shrink-0"
                 >
-                  <IconCheck size={18} />
+                  <IconCheck size={16} />
                 </button>
               </div>
             ) : (

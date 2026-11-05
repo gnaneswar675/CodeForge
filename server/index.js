@@ -7,7 +7,7 @@ import { initialSheet } from "../src/data/initialSheet.js"
 import UserSheet from "./models/UserSheet.js"
 
 const app = express()
-const port = Number(process.env.API_PORT || process.env.PORT) || 3001
+const port = Number(process.env.PORT || process.env.API_PORT) || 3001
 
 const defaultOrigins = [
   "http://localhost:1234",
@@ -27,23 +27,27 @@ const isOriginAllowed = (origin) => {
   const cleanOrigin = origin.replace(/\/$/, "")
   if (allowedOrigins.includes(cleanOrigin)) return true
   if (/^https:\/\/coding-management-sheet.*\.vercel\.app$/.test(cleanOrigin)) return true
+  if (process.env.NODE_ENV !== "production") return true
   return false
 }
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (isOriginAllowed(origin)) {
-        callback(null, true)
-        return
-      }
-      callback(new Error(`Origin ${origin} is not allowed by CORS`))
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  }),
-)
+const corsOptions = {
+  origin(origin, callback) {
+    if (isOriginAllowed(origin)) {
+      callback(null, true)
+    } else {
+      console.warn(`[CORS] Blocked request from origin: ${origin}`)
+      callback(null, false)
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions))
+app.options("*", cors(corsOptions))
 
 app.use(express.json({ limit: "2mb" }))
 app.use(clerkMiddleware())
@@ -91,12 +95,28 @@ const isValidSheet = (value) => {
   )
 }
 
+app.get("/", (_req, res) => {
+  res.json({
+    status: "ok",
+    message: "Coding Management Sheet API is running.",
+    database: mongoose.connection.readyState === 1 ? "connected" : "connecting/disconnected",
+  })
+})
+
 app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok" })
+  res.json({
+    status: "ok",
+    database: mongoose.connection.readyState === 1 ? "connected" : "connecting/disconnected",
+  })
 })
 
 app.get("/api/sheet", requireUser, async (req, res, next) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      res.status(503).json({ error: "Database is connecting. Please retry in a few seconds." })
+      return
+    }
+
     let userSheet = await UserSheet.findOne({ clerkUserId: req.clerkUserId })
     if (!userSheet) {
       try {
@@ -118,6 +138,11 @@ app.get("/api/sheet", requireUser, async (req, res, next) => {
 
 app.put("/api/sheet", requireUser, async (req, res, next) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      res.status(503).json({ error: "Database is connecting. Please retry in a few seconds." })
+      return
+    }
+
     if (!isValidSheet(req.body?.sheet)) {
       res.status(400).json({ error: "The submitted sheet data is invalid." })
       return
@@ -147,22 +172,33 @@ app.use((error, _req, res, _next) => {
 })
 
 const start = async () => {
-  if (!process.env.MONGODB_URI) {
-    throw new Error("MONGODB_URI must be configured.")
-  }
-  if (!process.env.CLERK_SECRET_KEY) {
-    throw new Error("CLERK_SECRET_KEY must be configured.")
-  }
-  const secretKey = process.env.CLERK_SECRET_KEY
-  if (secretKey.includes("…") || secretKey.includes("...") || secretKey.length < 30) {
+  const secretKey = process.env.CLERK_SECRET_KEY || ""
+  if (!secretKey) {
+    console.error("❌ CLERK_SECRET_KEY is missing from environment variables.")
+  } else if (secretKey.includes("…") || secretKey.includes("...") || secretKey.length < 30) {
     console.error("\n❌ [CRITICAL CONFIGURATION ERROR]");
-    console.error("Your CLERK_SECRET_KEY in .env is truncated with an ellipsis ('…') or is incomplete (only " + secretKey.length + " characters).");
+    console.error("Your CLERK_SECRET_KEY in environment is truncated with an ellipsis ('…') or is incomplete (only " + secretKey.length + " characters).");
     console.error("Please go to https://dashboard.clerk.com -> API Keys and click the 'Copy' icon to copy the entire secret key.\n");
   }
-  await mongoose.connect(process.env.MONGODB_URI)
+
+  if (!process.env.MONGODB_URI) {
+    console.error("❌ MONGODB_URI is missing from environment variables.")
+  }
+
   app.listen(port, () => {
     console.log(`API server listening on port ${port}`)
   })
+
+  if (process.env.MONGODB_URI) {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI)
+      console.log("Connected to MongoDB successfully.")
+    } catch (err) {
+      console.error("❌ MongoDB connection error:", err.message)
+      console.error("👉 Check: 1) MongoDB Atlas -> Network Access -> Add IP 0.0.0.0/0 (Allow Access from Anywhere)")
+      console.error("👉 Check: 2) Database user credentials in MONGODB_URI.")
+    }
+  }
 }
 
 start().catch((error) => {

@@ -17,27 +17,27 @@ export default function ConfirmModal({
           {message}
         </p>
       </div>
-            <div className="flex items-center justify-end gap-3 mt-4">
-          <button
-            onClick={onClose}
-            className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all active:scale-95"
-          >
-            {cancelText}
-          </button>
-          <button
-            onClick={() => {
-              onConfirm()
-              onClose()
-            }}
-            className={`px-5 py-2.5 text-sm font-bold text-white rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-95 ${
-              danger 
-                ? 'bg-red-500 hover:bg-red-600 shadow-red-500/20' 
-                : 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20'
-            }`}
-          >
-            {confirmText}
-          </button>
-        </div>
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 mt-4">
+        <button
+          onClick={onClose}
+          className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all active:scale-95 cursor-pointer text-center"
+        >
+          {cancelText}
+        </button>
+        <button
+          onClick={() => {
+            onConfirm()
+            onClose()
+          }}
+          className={`px-5 py-2.5 text-sm font-bold text-white rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-95 cursor-pointer text-center ${
+            danger 
+              ? 'bg-red-500 hover:bg-red-600 shadow-red-500/20' 
+              : 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20'
+          }`}
+        >
+          {confirmText}
+        </button>
+      </div>
     </Modal>
   )
 }

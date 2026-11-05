@@ -461,38 +461,40 @@ function SheetApplication({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search topics..."
-                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 placeholder-slate-500 dark:placeholder-slate-500 text-slate-900 dark:text-slate-100 transition-all shadow-sm"
+                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 placeholder-slate-500 dark:placeholder-slate-500 text-slate-900 dark:text-slate-100 transition-all shadow-sm text-sm sm:text-base"
               />
             </div>
 
-            <button
-              onClick={() => {
-                if (readOnly) {
-                  promptAuth?.("add")
-                  return
-                }
-                setShowAddTopic(true)
-              }}
-              className="group flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold text-white bg-slate-900 dark:bg-amber-500 dark:text-slate-900 rounded-xl hover:bg-slate-800 dark:hover:bg-amber-400 hover:shadow-lg transition-all shadow-md cursor-pointer"
-            >
-              <IconPlus size={18} className="transition-transform group-hover:rotate-90" />
-              Add Topic
-            </button>
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3">
+              <button
+                onClick={() => {
+                  if (readOnly) {
+                    promptAuth?.("add")
+                    return
+                  }
+                  setShowAddTopic(true)
+                }}
+                className="group flex items-center justify-center gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-bold text-white bg-slate-900 dark:bg-amber-500 dark:text-slate-900 rounded-xl hover:bg-slate-800 dark:hover:bg-amber-400 hover:shadow-lg transition-all shadow-md cursor-pointer"
+              >
+                <IconPlus size={18} className="transition-transform group-hover:rotate-90 flex-shrink-0" />
+                <span className="truncate">Add Topic</span>
+              </button>
 
-            <button
-              onClick={() => {
-                if (readOnly) {
-                  promptAuth?.("reset")
-                  return
-                }
-                setShowResetConfirm(true)
-              }}
-              className="group flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500 hover:text-red-600 dark:hover:text-red-400 rounded-xl hover:shadow-md transition-all shadow-sm cursor-pointer"
-              title="Restore sheet to default questions and topics"
-            >
-              <IconRotateCcw size={18} className="transition-transform group-hover:-rotate-90" />
-              Reset Sheet
-            </button>
+              <button
+                onClick={() => {
+                  if (readOnly) {
+                    promptAuth?.("reset")
+                    return
+                  }
+                  setShowResetConfirm(true)
+                }}
+                className="group flex items-center justify-center gap-2 px-3 sm:px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500 hover:text-red-600 dark:hover:text-red-400 rounded-xl hover:shadow-md transition-all shadow-sm cursor-pointer"
+                title="Restore sheet to default questions and topics"
+              >
+                <IconRotateCcw size={18} className="transition-transform group-hover:-rotate-90 flex-shrink-0" />
+                <span className="truncate">Reset Sheet</span>
+              </button>
+            </div>
           </div>
 
           <Droppable droppableId="topics" type="TOPIC">

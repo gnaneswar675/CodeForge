@@ -36,17 +36,17 @@ export default function Header({ sheet, questions, onSignOut, onSignIn }) {
       <div className="max-w-[1400px] mx-auto p-4 md:p-8 relative">
         
         {/* Main Layout Container */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
           
           {/* Left Section: Title, Description & Feature Badges */}
           <div className="flex-grow min-w-0 md:pr-4"> 
-            <div className="flex justify-between items-start">
-              <h1 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white transition-colors">
+            <div className="flex items-start justify-between gap-3">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white transition-colors leading-tight min-w-0">
                 {displayTitle}
               </h1>
               
               {/* Mobile Controls: Theme toggle + User Account Icon */}
-              <div className="flex items-center gap-2 md:hidden">
+              <div className="flex items-center gap-2 flex-shrink-0 md:hidden">
                 <button
                   type="button"
                   onClick={toggleTheme}
@@ -62,45 +62,45 @@ export default function Header({ sheet, questions, onSignOut, onSignIn }) {
 
             {/* DESCRIPTION */}
             <div className="mt-3">
-              <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+              <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
                 {displayDescription}
               </p>
             </div>
             
             {/* FEATURE CHIPS */}
-            <div className="flex flex-wrap items-center gap-2 mt-4">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 shadow-xs">
-                <IconGrip size={13} />
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-4">
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 shadow-xs">
+                <IconGrip size={12} />
                 Drag & Drop Reordering
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-xs">
-                <IconFolder size={13} />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-xs">
+                <IconFolder size={12} />
                 Custom Topics & Questions
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-xs">
-                <IconCheck size={13} />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-xs">
+                <IconCheck size={12} />
                 Live Cloud Sync (MongoDB)
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 shadow-xs">
-                <IconRotateCcw size={13} />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 shadow-xs">
+                <IconRotateCcw size={12} />
                 1-Click Default Reset
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-xs">
-                <IconBookmark size={13} />
+              <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[11px] sm:text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-xs">
+                <IconBookmark size={12} />
                 LeetCode & Editorial Solutions
               </span>
             </div>
           </div>
 
           {/* Right Section: Progress & Desktop Toggle */}
-          <div className="flex-shrink-0 flex items-center justify-center md:justify-end gap-6 md:gap-8 mt-4 md:mt-0">
+          <div className="flex-shrink-0 flex items-center justify-start sm:justify-center md:justify-end gap-5 md:gap-8 mt-2 md:mt-0 pt-2 md:pt-0 border-t border-slate-100 dark:border-slate-800 md:border-t-0">
             
             {/* Progress Container */}
-            <div className="flex items-center gap-4">
-              <ProgressRing progress={progress} size={80} strokeWidth={8} />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <ProgressRing progress={progress} size={72} strokeWidth={7} />
               <div className="flex flex-col">
-                <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Progress</span>
-                <span className="text-2xl font-bold text-slate-900 dark:text-white">
+                <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Progress</span>
+                <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                   {solvedQuestions} / {totalQuestions}
                 </span>
               </div>
@@ -123,7 +123,7 @@ export default function Header({ sheet, questions, onSignOut, onSignIn }) {
         </div>
 
         {/* STATS ROW */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-6 md:mt-8">
           <StatsCard
             label="Total Questions"
             value={totalQuestions}
