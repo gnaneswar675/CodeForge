@@ -55,7 +55,7 @@ export default function Header({
           <div className="flex items-center gap-2 flex-shrink-0">
             <IconCodolio size={26} className="text-orange-500" />
             <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Codolio
+              CodeForge
             </span>
           </div>
 
@@ -94,7 +94,13 @@ function ProfileMenu({ onSignOut, onSignIn }) {
   const { user, isSignedIn } = useUser()
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const [signOutError, setSignOutError] = useState(null)
+  const [imgError, setImgError] = useState(false)
   const menuRef = useRef(null)
+
+  // Reset imgError if user or imageUrl changes
+  useEffect(() => {
+    setImgError(false)
+  }, [user?.id, user?.imageUrl])
 
   useEffect(() => {
     if (!accountMenuOpen) return
@@ -135,32 +141,74 @@ function ProfileMenu({ onSignOut, onSignIn }) {
   const userDisplayName = user?.fullName || user?.username || ""
   const userEmail = user?.primaryEmailAddress?.emailAddress || ""
 
+  // First letter of name in uppercase for avatar fallback
+  const firstLetter = (
+    user?.firstName?.[0] ||
+    user?.fullName?.[0] ||
+    user?.username?.[0] ||
+    userEmail?.[0] ||
+    "U"
+  ).toUpperCase()
+
+  const hasProfileImage = Boolean(user?.imageUrl && !imgError)
+
   return (
     <div className="relative" ref={menuRef}>
       <button
         type="button"
         onClick={handleIconClick}
         aria-label={isSignedIn ? "Open account menu" : "Sign In with Clerk"}
-        title={isSignedIn ? "Account menu" : "Sign In"}
+        title={isSignedIn ? (userDisplayName || "Account menu") : "Sign In"}
         aria-expanded={isSignedIn ? accountMenuOpen : undefined}
-        className="flex items-center justify-center w-10 h-10 rounded-xl bg-slate-50 dark:bg-[#131926] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800 shadow-2xs active:scale-95 transition-all cursor-pointer"
+        className="flex items-center justify-center w-10 h-10 rounded-xl bg-slate-50 dark:bg-[#131926] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800 shadow-2xs active:scale-95 transition-all cursor-pointer overflow-hidden"
       >
-        <IconUser size={19} />
+        {!isSignedIn || !user ? (
+          /* Default User Outline Icon for Signed-Out Users */
+          <IconUser size={19} />
+        ) : hasProfileImage ? (
+          /* User's Profile Picture (Google / Clerk imageUrl) */
+          <img
+            src={user.imageUrl}
+            alt={userDisplayName || "User profile"}
+            className="w-7 h-7 rounded-full object-cover ring-1 ring-orange-500/30"
+            referrerPolicy="no-referrer"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          /* Circular Avatar with First Letter of Name in Uppercase */
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+            {firstLetter}
+          </div>
+        )}
       </button>
 
       {isSignedIn && user && accountMenuOpen && (
         <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#131926] p-3 shadow-xl animate-fade-in">
-          <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800/80 mb-2">
-            {userDisplayName ? (
-              <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
-                {userDisplayName}
-              </p>
-            ) : null}
-            {userEmail ? (
-              <p className="truncate text-xs text-slate-500 dark:text-slate-400">
-                {userEmail}
-              </p>
-            ) : null}
+          <div className="flex items-center gap-2.5 px-2 py-2 border-b border-slate-100 dark:border-slate-800/80 mb-2">
+            {hasProfileImage ? (
+              <img
+                src={user.imageUrl}
+                alt={userDisplayName || "User profile"}
+                className="w-9 h-9 rounded-full object-cover ring-1 ring-orange-500/30 flex-shrink-0"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 text-white font-bold text-sm flex items-center justify-center shadow-xs flex-shrink-0">
+                {firstLetter}
+              </div>
+            )}
+            <div className="min-w-0 flex-1">
+              {userDisplayName ? (
+                <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
+                  {userDisplayName}
+                </p>
+              ) : null}
+              {userEmail ? (
+                <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                  {userEmail}
+                </p>
+              ) : null}
+            </div>
           </div>
 
           {signOutError && (

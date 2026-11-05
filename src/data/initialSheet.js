@@ -192,7 +192,7 @@ export const initialSheet = {
   sheet: {
     name: "Customizable DSA Tracker & Practice Sheet",
     description:
-      "Your personalized workspace to master Data Structures & Algorithms. Build your custom curriculum with drag-and-drop ordering, track real-time topic progress, attach curated problem & video links, and sync your personalized sheet seamlessly to MongoDB.",
+      "Your personalized workspace to master Data Structures & Algorithms. Build your custom study curriculum, track your problem-solving progress in real time, customize topics and questions with drag-and-drop ordering, and keep your practice seamlessly saved to your account.",
     followers: 0,
     config: {
       topicOrder,

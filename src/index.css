@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -27,4 +27,59 @@
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.7);
+}
+
+/* Lightweight Floating Animations for Hero Visual */
+@keyframes dsa-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes dsa-float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(5px) rotate(1deg);
+  }
+}
+
+@keyframes dsa-float-reverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+@keyframes dsa-pulse-subtle {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+}
+
+.animate-dsa-float {
+  animation: dsa-float 4.8s ease-in-out infinite;
+}
+
+.animate-dsa-float-delayed {
+  animation: dsa-float-delayed 5.8s ease-in-out infinite 0.8s;
+}
+
+.animate-dsa-float-reverse {
+  animation: dsa-float-reverse 5.2s ease-in-out infinite 0.4s;
+}
+
+.animate-dsa-pulse {
+  animation: dsa-pulse-subtle 4.5s ease-in-out infinite;
 }

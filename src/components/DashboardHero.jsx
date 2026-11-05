@@ -1,14 +1,11 @@
 // src/components/DashboardHero.jsx
 import ProgressCard from './ProgressCard'
 import StatsCard from './StatsCard'
+import FloatingDsaVisual from './FloatingDsaVisual'
 import {
   IconFolder,
   IconCheck,
   IconBookmark,
-  IconGrip,
-  IconRotateCcw,
-  IconCloud,
-  IconBookOpen,
 } from './Icons'
 
 export default function DashboardHero({ sheet, questions }) {
@@ -20,7 +17,7 @@ export default function DashboardHero({ sheet, questions }) {
 
   const defaultTitle = "Customizable DSA Tracker & Practice Sheet"
   const defaultDescription =
-    "Your personalized workspace to master Data Structures & Algorithms. Build your custom curriculum with drag-and-drop ordering, track real-time topic progress, attach curated problem & video links, and sync your personalized sheet seamlessly to MongoDB."
+    "Your personalized workspace to master Data Structures & Algorithms. Build your custom study curriculum, track your problem-solving progress in real time, customize topics and questions with drag-and-drop ordering, and keep your practice seamlessly saved to your account."
 
   const isOldDefaultTitle =
     !sheet?.name ||
@@ -31,7 +28,8 @@ export default function DashboardHero({ sheet, questions }) {
   const isOldDefaultDesc =
     !sheet?.description ||
     sheet.description.includes("A curated collection of coding interview questions") ||
-    sheet.description.includes("Flipkart, etc")
+    sheet.description.includes("Flipkart, etc") ||
+    sheet.description.includes("MongoDB")
   const displayDescription = isOldDefaultDesc ? defaultDescription : sheet.description
 
   return (
@@ -44,43 +42,20 @@ export default function DashboardHero({ sheet, questions }) {
         </h1>
       </div>
 
-      {/* Description paragraph */}
-      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-4xl">
-        {displayDescription}
-      </p>
+      {/* Hero Header Area: Description on Left, Subtle Floating DSA Elements on Right */}
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-8 min-h-[85px]">
+        {/* Description paragraph */}
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl xl:max-w-3xl">
+          {displayDescription}
+        </p>
 
-      {/* FEATURE CHIPS ROW */}
-      <div className="flex flex-wrap items-center gap-2 mt-4 sm:mt-5">
-        {/* Orange Chip */}
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 shadow-2xs">
-          <IconGrip size={13} />
-          Drag & Drop Reordering
-        </span>
-        {/* Neutral Chip */}
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 shadow-2xs">
-          <IconFolder size={13} />
-          Custom Topics & Questions
-        </span>
-        {/* Green Chip */}
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-2xs">
-          <IconCloud size={13} />
-          Live Cloud Sync (MongoDB)
-        </span>
-        {/* Pink/Rose Chip */}
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 shadow-2xs">
-          <IconRotateCcw size={13} />
-          1-Click Default Reset
-        </span>
-        {/* Neutral Chip */}
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 shadow-2xs">
-          <IconBookOpen size={13} />
-          LeetCode & Editorial Solutions
-        </span>
+        {/* Subtle Floating DSA Themed Visual (Desktop Only) */}
+        <FloatingDsaVisual />
       </div>
 
       {/* STATS SECTION */}
       {/* Desktop View: 4-Column Grid with equal height and balanced alignment */}
-      <div className="hidden lg:grid grid-cols-4 gap-4 mt-6 items-stretch">
+      <div className="hidden lg:grid grid-cols-4 gap-4 mt-5 sm:mt-6 items-stretch">
         <ProgressCard
           progress={progress}
           solvedCount={solvedQuestions}
@@ -138,4 +113,3 @@ export default function DashboardHero({ sheet, questions }) {
     </div>
   )
 }
-
