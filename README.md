@@ -1,8 +1,8 @@
-# 🚀 Codolio - Customizable DSA Tracker & Practice Sheet
+# 🚀 CodeForge - Customizable DSA Tracker & Practice Sheet
 
 An interactive, modern Data Structures & Algorithms preparation workspace and practice sheet. Customize your DSA curriculum, track solved problems in real-time, reorder topics and questions with drag-and-drop, and seamlessly sync your progress to the cloud with Clerk authentication and MongoDB.
 
-![Codolio DSA Tracker](https://img.shields.io/badge/React-19-61dafb?style=flat&logo=react&logoColor=black)
+![CodeForge DSA Tracker](https://img.shields.io/badge/React-19-61dafb?style=flat&logo=react&logoColor=black)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=flat&logo=tailwind-css&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-4.21-000000?style=flat&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=flat&logo=mongodb&logoColor=white)

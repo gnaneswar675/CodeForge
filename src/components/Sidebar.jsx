@@ -1,5 +1,5 @@
 // src/components/Sidebar.jsx
-import { IconCodolio, IconHome, IconX } from './Icons'
+import { IconCodeForge, IconHome, IconX } from './Icons'
 
 export default function Sidebar({
   isOpen = true,
@@ -18,9 +18,9 @@ export default function Sidebar({
         {/* On mobile drawer only: show brand + close button */}
         <div className="flex lg:hidden items-center justify-between px-2 py-3 mb-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <IconCodolio size={24} className="text-orange-500" />
+            <IconCodeForge size={24} className="text-orange-500" />
             <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-              Codolio
+              CodeForge
             </span>
           </div>
           <button
@@ -51,7 +51,7 @@ export default function Sidebar({
       <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/60">
         <div className="rounded-2xl p-4 bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-transparent dark:from-orange-500/15 dark:via-slate-900 dark:to-slate-900 border border-orange-200/60 dark:border-orange-500/20 relative overflow-hidden">
           <div className="w-9 h-9 rounded-xl bg-orange-500/15 dark:bg-orange-500/20 flex items-center justify-center text-orange-500 mb-3 shadow-2xs">
-            <IconCodolio size={18} />
+            <IconCodeForge size={18} />
           </div>
           <h4 className="text-xs font-bold text-slate-900 dark:text-white tracking-wide">
             Track • Practice • Master

@@ -5,7 +5,7 @@ import {
   IconSun,
   IconMoon,
   IconUser,
-  IconCodolio,
+  IconCodeForge,
   IconMenu,
 } from './Icons'
 import { useTheme } from '../hooks/useTheme'
@@ -38,7 +38,7 @@ export default function Header({
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/95 dark:bg-[#0b0f17]/95 backdrop-blur-md transition-colors">
       <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
-        {/* Left: Single Hamburger Menu Button, Codolio Brand, Divider, Orange Bar, Title */}
+        {/* Left: Single Hamburger Menu Button, CodeForge Brand, Divider, Orange Bar, Title */}
         <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
           {/* Only 1 Hamburger Menu Button on the entire interface */}
           <button
@@ -51,9 +51,9 @@ export default function Header({
             <IconMenu size={20} />
           </button>
 
-          {/* Codolio Brand Logo & Name */}
+          {/* CodeForge Brand Logo & Name */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <IconCodolio size={26} className="text-orange-500" />
+            <IconCodeForge size={26} className="text-orange-500" />
             <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
               CodeForge
             </span>

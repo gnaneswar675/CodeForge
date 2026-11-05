@@ -323,7 +323,7 @@ function SheetApplication({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(() => {
     try {
-      const saved = localStorage.getItem("codolio_sidebar_open")
+      const saved = localStorage.getItem("codeforge_sidebar_open") ?? localStorage.getItem("codolio_sidebar_open")
       if (saved !== null) return saved === "true"
       return typeof window !== "undefined" ? window.innerWidth >= 1024 : true
     } catch {
@@ -335,7 +335,7 @@ function SheetApplication({
     setSidebarOpen((prev) => {
       const next = !prev
       try {
-        localStorage.setItem("codolio_sidebar_open", String(next))
+        localStorage.setItem("codeforge_sidebar_open", String(next))
       } catch {}
       return next
     })

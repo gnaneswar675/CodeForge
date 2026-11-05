@@ -93,7 +93,7 @@ export default function Question({ question, dragHandleProps }) {
           {question.isSolved && <IconCheck size={12} className="text-white" />}
         </button>
 
-        {/* Platform / Codolio Icon */}
+        {/* Platform / CodeForge Icon */}
         <div className="flex-shrink-0">
           <PlatformIcon platform={platform} url={problemUrl} size={16} />
         </div>

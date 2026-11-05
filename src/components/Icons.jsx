@@ -203,7 +203,7 @@ export function PlatformIcon({ platform, url = '', size = 16, className = '' }) 
     return <IconHackerRank size={size} className={className} />
   }
   
-  return <IconCodolio size={size} className={className} />
+  return <IconCodeForge size={size} className={className} />
 }
 
 export function IconSun({ size = 16 }) {
@@ -297,7 +297,7 @@ export function IconPlusCircle({ size = 16, className = '' }) {
   )
 }
 
-export function IconCodolio({ size = 20, className = '' }) {
+export function IconCodeForge({ size = 20, className = '' }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <polyline points="16 18 22 12 16 6" />
@@ -305,3 +305,5 @@ export function IconCodolio({ size = 20, className = '' }) {
     </svg>
   )
 }
+
+export const IconCodolio = IconCodeForge
