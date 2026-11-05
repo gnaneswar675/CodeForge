@@ -32,7 +32,7 @@ export default function ConfirmModal({
           className={`px-5 py-2.5 text-sm font-bold text-white rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-95 cursor-pointer text-center ${
             danger 
               ? 'bg-red-500 hover:bg-red-600 shadow-red-500/20' 
-              : 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20'
+              : 'bg-orange-500 hover:bg-orange-600 shadow-orange-500/20'
           }`}
         >
           {confirmText}

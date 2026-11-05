@@ -21,12 +21,12 @@ export default function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          className="stroke-slate-200 dark:stroke-slate-700"
+          className="stroke-slate-200/80 dark:stroke-slate-800"
           strokeWidth={strokeWidth}
         />
         {/* Progress circle */}
         <circle
-          className="transition-[stroke-dashoffset] duration-300 stroke-amber-500"
+          className="transition-[stroke-dashoffset] duration-300 stroke-orange-500"
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -40,7 +40,7 @@ export default function ProgressRing({
       
       {showLabel && (
         <span
-          className="absolute text-slate-900 dark:text-slate-100 font-semibold translate-y-[1px]"
+          className="absolute text-slate-900 dark:text-white font-bold translate-y-[1px]"
           style={{ fontSize: size > 60 ? '1.125rem' : '0.875rem' }}
         >
           {Math.round(progress)}%

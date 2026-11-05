@@ -12,7 +12,7 @@ export default function AuthPromptModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Sign In Required" size="sm">
       <div className="flex flex-col items-center text-center py-2">
-        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-amber-500/10 text-amber-500 mb-4 border border-amber-500/20">
+        <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-500/10 text-orange-500 mb-4 border border-orange-500/20 shadow-xs">
           <IconUser size={28} />
         </div>
         <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
@@ -30,7 +30,7 @@ export default function AuthPromptModal({
               onClose()
               onSignIn()
             }}
-            className="flex-1 px-4 py-2.5 text-sm font-bold text-slate-900 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
+            className="flex-1 px-4 py-2.5 text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl transition-all shadow-md shadow-orange-500/20 active:scale-95 cursor-pointer"
           >
             Sign In
           </button>

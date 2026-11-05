@@ -3,7 +3,17 @@ import { useSheetStore } from "../store/sheetStore"
 import SubTopic from "./SubTopic"
 import ConfirmModal from "./ConfirmModal"
 import { Droppable, Draggable } from "@hello-pangea/dnd"
-import { IconGrip, IconPlus, IconEdit, IconTrash, IconChevronDown, IconCheck } from "./Icons"
+import {
+  IconGrip,
+  IconPlus,
+  IconEdit,
+  IconTrash,
+  IconChevronDown,
+  IconChevronRight,
+  IconCheck,
+  IconFolder,
+  IconPlusCircle,
+} from "./Icons"
 
 // Add dragHandleProps as a prop for topic-level reordering
 export default function Topic({ topic, subTopics, dragHandleProps }) {
@@ -21,15 +31,16 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
   const config = useSheetStore((s) => s.sheet?.sheet?.config || {})
 
   const orderedSubTopics = config.subTopicOrder?.[topic] || Object.keys(subTopics)
-  
+
   const questionCount = Object.values(subTopics).reduce(
-    (sum, qs) => sum + qs.filter(q => !q.isPlaceholder).length, 
-    0
+    (sum, qs) => sum + qs.filter((q) => !q.isPlaceholder).length,
+    0,
   )
   const solvedCount = Object.values(subTopics).reduce(
-    (sum, qs) => sum + qs.filter(q => q.isSolved && !q.isPlaceholder).length, 
-    0
+    (sum, qs) => sum + qs.filter((q) => q.isSolved && !q.isPlaceholder).length,
+    0,
   )
+  const percentSolved = Math.round((solvedCount / (questionCount || 1)) * 100)
 
   const handleSaveEdit = () => {
     if (readOnly) {
@@ -43,102 +54,111 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
     setIsEditing(false)
   }
 
+  const handleAddSubTopic = () => {
+    if (readOnly) {
+      requestLogin?.("add")
+      return
+    }
+    if (!newSub.trim()) return
+    addSubTopic(topic, newSub.trim())
+    setNewSub("")
+  }
+
   return (
     <>
-      <div 
-        className={`bg-white dark:bg-slate-800 border transition-all duration-300 rounded-xl overflow-hidden ${
-          open 
-            ? 'border-amber-500/30 ring-1 ring-amber-500/30 shadow-lg dark:shadow-slate-900/50' 
-            : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-md'
+      <div
+        className={`transition-all duration-200 rounded-2xl overflow-hidden ${
+          open
+            ? "border border-orange-300 dark:border-orange-500 ring-1 ring-orange-300/30 dark:ring-orange-500/25 bg-orange-500/[0.02] dark:bg-[#111724] shadow-sm"
+            : "border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-[#131926] hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs"
         }`}
       >
         {/* TOPIC HEADER */}
         <div
-          className={`flex items-center justify-between px-4 md:px-6 py-4 md:py-5 cursor-pointer transition-colors duration-200 ${
-            open ? 'bg-slate-50/50 dark:bg-slate-700/20' : 'bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700/30'
+          className={`flex items-center justify-between px-3.5 sm:px-5 py-3.5 sm:py-4 cursor-pointer transition-colors duration-150 ${
+            open
+              ? "bg-orange-500/[0.03] dark:bg-white/[0.02]"
+              : "hover:bg-slate-50/60 dark:hover:bg-white/[0.02]"
           }`}
           onClick={() => setOpen((o) => !o)}
         >
-          {/* Left side - Drag dots, Chevron, and Title */}
-          <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-            
+          {/* Left side: Drag handle, Chevron, Folder Icon, and Title */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
             {/* Topic Drag Handle Dots - Desktop Only */}
-            <div 
+            <div
               {...dragHandleProps}
-              className="hidden md:flex items-center justify-center p-1 text-slate-300 dark:text-slate-600 hover:text-slate-400 transition-colors cursor-grab active:cursor-grabbing"
-              onClick={(e) => e.stopPropagation()} // Stop click from collapsing topic
+              className="hidden md:flex items-center justify-center p-1 text-slate-300 dark:text-slate-600 hover:text-slate-500 transition-colors cursor-grab active:cursor-grabbing flex-shrink-0"
+              onClick={(e) => e.stopPropagation()}
             >
-              <IconGrip size={18} />
+              <IconGrip size={16} />
             </div>
 
-            <div
-              className={`text-slate-400 dark:text-slate-500 transition-transform duration-300 ease-out ${
-                open ? 'rotate-0 text-amber-500' : '-rotate-90'
-              }`}
-            >
-              <IconChevronDown size={18} />
+            {/* Chevron */}
+            <div className={`transition-colors ${open ? "text-orange-500" : "text-slate-400 dark:text-slate-500"}`}>
+              {open ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
+            </div>
+
+            {/* Folder Icon in vibrant orange */}
+            <div className="text-orange-500 flex-shrink-0">
+              <IconFolder size={18} />
             </div>
 
             {isEditing ? (
-              <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0" onClick={(e) => e.stopPropagation()}>
+              <div
+                className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleSaveEdit()
-                    if (e.key === 'Escape') {
+                    if (e.key === "Enter") handleSaveEdit()
+                    if (e.key === "Escape") {
                       setEditName(topic)
                       setIsEditing(false)
                     }
                   }}
                   autoFocus
-                  className="w-full min-w-0 max-w-[160px] sm:max-w-xs md:max-w-sm px-2.5 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base font-semibold bg-white dark:bg-slate-900 border border-amber-500 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:ring-4 focus:ring-amber-500/10 outline-none"
+                  className="w-full min-w-0 max-w-[160px] sm:max-w-xs md:max-w-sm px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold bg-white dark:bg-[#0c101a] border border-orange-500 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-orange-500/10 outline-none"
                 />
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
                     handleSaveEdit()
                   }}
-                  className="p-1.5 sm:p-2 bg-amber-500 text-slate-900 rounded-lg hover:bg-amber-400 transition-colors shadow-sm cursor-pointer flex-shrink-0"
+                  className="p-1.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-2xs cursor-pointer flex-shrink-0"
                 >
-                  <IconCheck size={16} />
+                  <IconCheck size={14} />
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col min-w-0">
-                <h2 className={`text-base md:text-lg font-bold m-0 truncate transition-colors ${open ? 'text-amber-600 dark:text-amber-500' : 'text-slate-900 dark:text-slate-100'}`}>
-                  {topic}
-                </h2>
-              </div>
+              <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white m-0 truncate">
+                {topic}
+              </h2>
             )}
           </div>
 
-          {/* Right side - Progress and Actions */}
-          <div className="flex items-center gap-2 md:gap-6">
-            <div className="flex flex-col items-end gap-1 min-w-[50px] md:min-w-[120px]">
-              <span className={`text-[11px] md:text-xs font-bold ${
-                solvedCount === questionCount && questionCount > 0 
-                  ? 'text-green-500' 
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}>
-                {Math.round((solvedCount / (questionCount || 1)) * 100)}%
+          {/* Right side: Progress percentage, Mini bar, Edit & Delete */}
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            {/* Progress indicator */}
+            <div className="flex flex-col items-end gap-1 min-w-[50px] sm:min-w-[80px]">
+              <span className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-200">
+                {percentSolved}%
               </span>
-              <div className="hidden md:block w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full transition-all duration-500 ease-out ${
-                    solvedCount === questionCount && questionCount > 0
-                      ? 'bg-green-500'
-                      : 'bg-amber-500'
-                  }`}
-                  style={{ width: `${(solvedCount / (questionCount || 1)) * 100}%` }}
+              <div className="w-14 sm:w-20 h-1.5 bg-slate-200 dark:bg-slate-700/80 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-orange-500 rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${percentSolved}%` }}
                 />
               </div>
             </div>
 
-            <div className="w-px h-6 md:h-8 bg-slate-200 dark:bg-slate-700 mx-1" />
+            <div className="w-px h-5 bg-slate-200 dark:border-slate-800 mx-0.5 sm:mx-1" />
 
-            <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+            {/* Actions: Edit & Delete */}
+            <div className="flex items-center gap-0.5 sm:gap-1" onClick={(e) => e.stopPropagation()}>
               <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   if (readOnly) {
@@ -147,12 +167,13 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
                   }
                   setIsEditing(true)
                 }}
-                className="p-2 text-slate-400 hover:text-amber-600 dark:text-slate-500 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-lg transition-all active:scale-90 cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-orange-500 dark:text-slate-500 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-500/10 rounded-lg transition-all active:scale-90 cursor-pointer"
                 title="Edit Topic"
               >
-                <IconEdit size={16} />
+                <IconEdit size={15} />
               </button>
               <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   if (readOnly) {
@@ -161,10 +182,10 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
                   }
                   setShowDeleteModal(true)
                 }}
-                className="p-2 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all active:scale-90 cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-all active:scale-90 cursor-pointer"
                 title="Delete Topic"
               >
-                <IconTrash size={16} />
+                <IconTrash size={15} />
               </button>
             </div>
           </div>
@@ -172,46 +193,37 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
 
         {/* Collapsible Content */}
         {open && (
-          <div className="px-4 md:px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-700/50 animate-fade-in origin-top">
+          <div className="px-3.5 sm:px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800/80 animate-fade-in">
             {/* ADD SUBTOPIC UI */}
-            <div className="flex flex-col sm:flex-row gap-3 my-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700/50">
-              <div className="flex-1">
-                <label className="block text-[10px] font-medium text-slate-500 uppercase tracking-wider mb-1 ml-1">
+            <div className="my-3">
+              <div className="flex items-center gap-1.5 mb-2">
+                <IconPlusCircle size={16} className="text-orange-500" />
+                <span className="text-xs sm:text-sm font-bold text-orange-600 dark:text-orange-400">
                   New Subtopic
-                </label>
+                </span>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2.5">
                 <input
                   placeholder="e.g. Priority Queue, Binary Search..."
                   value={newSub}
                   onChange={(e) => setNewSub(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && newSub.trim()) {
-                      if (readOnly) {
-                        requestLogin?.("add")
-                        return
-                      }
-                      addSubTopic(topic, newSub.trim())
-                      setNewSub("")
+                    if (e.key === "Enter" && newSub.trim()) {
+                      handleAddSubTopic()
                     }
                   }}
-                  className="w-full px-4 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all shadow-sm"
+                  className="flex-1 px-4 py-2.5 text-xs sm:text-sm bg-white dark:bg-[#0c101a] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10 outline-none transition-all shadow-2xs"
                 />
+                <button
+                  type="button"
+                  onClick={handleAddSubTopic}
+                  disabled={!newSub.trim()}
+                  className="px-6 py-2.5 text-xs sm:text-sm font-bold text-white bg-slate-900 dark:bg-orange-500 dark:text-slate-950 dark:hover:bg-orange-400 hover:bg-slate-800 rounded-xl transition-all shadow-xs active:scale-95 disabled:opacity-40 flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <IconPlus size={16} />
+                  Add
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  if (readOnly) {
-                    requestLogin?.("add")
-                    return
-                  }
-                  if (!newSub.trim()) return
-                  addSubTopic(topic, newSub.trim())
-                  setNewSub("")
-                }}
-                className="group flex items-center justify-center gap-2 px-5 py-2 text-sm font-bold text-white bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 rounded-xl transition-all shadow-md active:scale-95 disabled:opacity-50 min-h-[40px] sm:self-end cursor-pointer"
-                disabled={!newSub.trim()}
-              >
-                <IconPlus size={16} className="transition-transform group-hover:rotate-90" />
-                Add
-              </button>
             </div>
 
             {/* SUBTOPICS LIST */}
@@ -220,36 +232,30 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="flex flex-col gap-4 mt-2 px-0.5" 
+                  className="flex flex-col gap-3.5 mt-4"
                 >
                   {orderedSubTopics.map((sub, index) => (
-                    <Draggable
-                      key={sub}
-                      draggableId={`${topic}-${sub}`}
-                      index={index}
-                    >
+                    <Draggable key={sub} draggableId={`${topic}-${sub}`} index={index}>
                       {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          className={`group border rounded-xl bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 transition-all duration-200 overflow-hidden ${
-                            snapshot.isDragging 
-                              ? 'border-amber-500 shadow-xl z-50' 
-                              : 'hover:border-slate-300 dark:hover:border-slate-500 hover:shadow-md'
+                          className={`group rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-[#131926] transition-all overflow-hidden ${
+                            snapshot.isDragging ? "shadow-xl z-50 ring-2 ring-orange-500" : "hover:border-slate-300 dark:hover:border-slate-700"
                           }`}
                         >
                           <div className="flex items-stretch w-full">
                             {/* SubTopic Drag Handle Strip */}
                             <div
                               {...provided.dragHandleProps}
-                              className="w-8 flex items-center justify-center cursor-grab active:cursor-grabbing hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-l-lg transition-colors border-r border-slate-100 dark:border-slate-700"
+                              className="hidden sm:flex w-7 items-center justify-center cursor-grab active:cursor-grabbing hover:bg-slate-50 dark:hover:bg-white/5 transition-colors border-r border-slate-100 dark:border-slate-800"
                             >
                               <div className="text-slate-300 dark:text-slate-600 group-hover:text-slate-400 transition-colors">
-                                <IconGrip size={14} />
+                                <IconGrip size={13} />
                               </div>
                             </div>
 
-                            <div className="flex-1 min-w-0 p-3 pl-1">
+                            <div className="flex-1 min-w-0 p-2.5 sm:p-3">
                               <SubTopic
                                 topic={topic}
                                 subTopic={sub}
@@ -262,10 +268,10 @@ export default function Topic({ topic, subTopics, dragHandleProps }) {
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                  
+
                   {orderedSubTopics.length === 0 && (
                     <div className="text-center py-8 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-xl">
-                      <p className="text-slate-400 dark:text-slate-600 text-sm">
+                      <p className="text-slate-400 dark:text-slate-600 text-xs sm:text-sm">
                         No subtopics yet. Add one above to start organizing.
                       </p>
                     </div>

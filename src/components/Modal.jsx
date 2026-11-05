@@ -40,12 +40,12 @@ const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
       {/* Modal Content */}
       <div
         ref={modalRef}
-        className={`relative w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl sm:rounded-2xl shadow-2xl transform transition-all animate-scale-in overflow-hidden`}
+        className={`relative w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col bg-white dark:bg-[#131926] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl transform transition-all animate-scale-in overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 backdrop-blur rounded-t-xl transition-colors flex-shrink-0">
-          <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-slate-100 transition-colors">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-[#0f141f] backdrop-blur rounded-t-2xl transition-colors flex-shrink-0">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white transition-colors">
             {title}
           </h3>
           <button
