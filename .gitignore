@@ -9,6 +9,7 @@ dist-ssr/
 build/
 out/
 .parcel-cache/
+.parcel-cache*/
 
 # Environment files & Secrets
 .env
