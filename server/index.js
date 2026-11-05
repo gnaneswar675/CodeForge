@@ -12,6 +12,7 @@ const port = Number(process.env.PORT || process.env.API_PORT) || 3001
 const defaultOrigins = [
   "http://localhost:1234",
   "http://localhost:3000",
+  "https://codeforge675.vercel.app",
   "https://coding-management-sheet.vercel.app",
 ]
 
@@ -26,7 +27,10 @@ const isOriginAllowed = (origin) => {
   if (!origin) return true
   const cleanOrigin = origin.replace(/\/$/, "")
   if (allowedOrigins.includes(cleanOrigin)) return true
-  if (/^https:\/\/coding-management-sheet.*\.vercel\.app$/.test(cleanOrigin)) return true
+  // Allow all Vercel deployments (*.vercel.app) including previews and custom project names
+  if (/^https:\/\/[a-zA-Z0-9-_.]+\.vercel\.app$/.test(cleanOrigin)) return true
+  // Allow localhost & 127.0.0.1 on any port
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(cleanOrigin)) return true
   if (process.env.NODE_ENV !== "production") return true
   return false
 }
